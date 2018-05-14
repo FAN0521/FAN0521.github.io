@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="lecture2: Word Vector Representation: word2vec Word meaning Word2vec introduction Objective function gradients Optimization refresher  Word meaningHow do we represent the meaning of a word? Discrete r">
+<meta property="og:type" content="article">
+<meta property="og:title">
+<meta property="og:url" content="http://yoursite.com/2018/04/08/lecture2- Word Vector Representation- word2vec/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="lecture2: Word Vector Representation: word2vec Word meaning Word2vec introduction Objective function gradients Optimization refresher  Word meaningHow do we represent the meaning of a word? Discrete r">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/Users/fan/fw/文档/面试/CS224n/图片/NLP2-3.jpg">
+<meta property="og:updated_time" content="2018-05-14T06:41:16.251Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title">
+<meta name="twitter:description" content="lecture2: Word Vector Representation: word2vec Word meaning Word2vec introduction Objective function gradients Optimization refresher  Word meaningHow do we represent the meaning of a word? Discrete r">
+<meta name="twitter:image" content="http://yoursite.com/Users/fan/fw/文档/面试/CS224n/图片/NLP2-3.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/08/lecture2- Word Vector Representation- word2vec/"/>
+
+
+
+
+
+  <title> | </title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title"></span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/08/lecture2- Word Vector Representation- word2vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FAN">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T22:53:42+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="lecture2-Word-Vector-Representation-word2vec"><a href="#lecture2-Word-Vector-Representation-word2vec" class="headerlink" title="lecture2: Word Vector Representation: word2vec"></a>lecture2: Word Vector Representation: word2vec</h1><ul>
+<li>Word meaning</li>
+<li>Word2vec introduction</li>
+<li>Objective function gradients</li>
+<li>Optimization refresher</li>
+</ul>
+<h2 id="Word-meaning"><a href="#Word-meaning" class="headerlink" title="Word meaning"></a>Word meaning</h2><p>How do we represent the meaning of a word?</p>
+<h3 id="Discrete-representation-WordNet"><a href="#Discrete-representation-WordNet" class="headerlink" title="Discrete representation: WordNet"></a>Discrete representation: WordNet</h3><p>之前一直使用分类词典的方法，考虑一个词的上位词以及同义词的集合。常用的是WordNet这样的词库。比如在nltk中可以通过WordNet去查询一个词的上位词或同义词。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> wordnet <span class="keyword">as</span> wn</span><br><span class="line">	panda = wn.synset(<span class="string">'panda.n.01'</span>)</span><br><span class="line">	hyper = <span class="keyword">lambda</span> s: s.hypernyms()</span><br><span class="line">	list(panda.closure(hyper))</span><br><span class="line">```	</span><br><span class="line">	</span><br><span class="line">Problems:</span><br><span class="line"></span><br><span class="line">* Great <span class="keyword">as</span> a resource but missing nuances / 同义词之间还是有微妙的差异</span><br><span class="line">* Missing new words / 缺少新词</span><br><span class="line">* subjective / 太过主观</span><br><span class="line">* Requires human labor to create <span class="keyword">and</span> adapt / 需要大量人力去整理</span><br><span class="line">* Hard to compute accurate word similarity / 无法准确计算词语间相似度</span><br><span class="line"></span><br><span class="line"><span class="comment">### Symbolic representation: One-Hot</span></span><br><span class="line"></span><br><span class="line">It<span class="string">'s a localist representation. It has no inherent notion of similarity. Our query and document vectors are orthogonal(正交的). There is no natural notion of similarity in a set of one-hot vectors.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">主要问题在于one-hot是两两正交的，无法计算两个词之间的相似度。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### Distributional representations：Word2Vec</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">* Get a lot of value by representing a word by means of its neighbours</span></span><br><span class="line"><span class="string">* Word meaning is defined in terms of vectors</span></span><br><span class="line"><span class="string">* Build a dense vector for each word type, chosen so that it is good at predicting other words appearing in its context.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">将之前稀疏的向量，压缩到一个稠密的向量中来表示该词。通过调整一个单词及其上下文的单词的向量，使得我们可以通过这两个向量去计算词的相似度，或者可以预测上下文。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## Word2vec introduction</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### Basic idea of learning neural network word embeddings</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Define a model aim to predict between a center word $ w_t $ and context words in terms of word vectors:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$$ p(context|w_t)=\ldots $$</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Loss function. eg: </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$$ J=1-p(w_&#123;-t&#125;|w_t) $$ </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ w_&#123;-t&#125; $ 表示 $ w_t $ 的上下文，在语料库中进行训练，最小化损失函数。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### Directly learning low-dimonsional word vectors</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Old idea:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">* Back-propagating errors (Rumelhart et al., 1986)</span></span><br><span class="line"><span class="string">* A nerual probabilistic language model (Bengio et al., 2003)</span></span><br><span class="line"><span class="string">* NLP from scratch (Collobert &amp; Weston, 2008)</span></span><br><span class="line"><span class="string">* Word2vec (Mikolov et al., 2013) </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### Main idea of word2vec</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Predict between every word and its context words.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Two algorithms:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">* Skip-gram (SG) : 预测上下文</span></span><br><span class="line"><span class="string">* Continuous Bag of Words (COBW) : 预测目标单词</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Two training methods:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">* Hierarchical softmax</span></span><br><span class="line"><span class="string">* Negative sampling</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">课程中讲解了 SG 和 Naive softmax。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## Objective function gradients</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### Word2vec Details</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">SG 算法通过当前的 word 去预测上下文的 word ， 它是一个词袋模型，不考虑顺序，所以只有一个条件分布。学习就是要最大化这些概率。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">For each word $ t=1\ldots T $, predict surrounding words in a window of "radius" $m$ of every word. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Objective function: Maximize the probability of any context word given the current center word:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$$ J'</span>(\theta) = \prod_&#123;t=<span class="number">1</span>&#125;^T \prod_&#123;-m\le j \le m, j \<span class="keyword">not</span>= <span class="number">0</span>&#125; p(w_&#123;t+j&#125; | w_t, \theta) $$</span><br><span class="line"></span><br><span class="line">Where $\theta$ represents all variables we will optimize.</span><br><span class="line"></span><br><span class="line">一篇文章中一共有T个词，每个词取前后m个词作为context，$\theta$所有词的vector，后面有讲到。目标函数使得整体的概率乘积最大化。</span><br><span class="line"></span><br><span class="line">Negative log likelihood (似然估计):</span><br><span class="line"></span><br><span class="line">$$ J(\theta) = - \frac&#123;<span class="number">1</span>&#125;&#123;T&#125; \sum_&#123;t=<span class="number">1</span>&#125;^&#123;T&#125; \sum_&#123;-m\le j \le m, j\<span class="keyword">not</span>=<span class="number">0</span>&#125; \log p(w_&#123;t+j&#125;|w_t) $$</span><br><span class="line"></span><br><span class="line">公式里的 <span class="number">1</span>/T 是为了求平均，normalization。负号是为了将目标函数最大化变成最小化，swap between maximizing <span class="keyword">and</span> minimizing。在后面的计算中，log 的底数取e， 等于ln。</span><br><span class="line"></span><br><span class="line"><span class="comment">### The objective function details</span></span><br><span class="line"></span><br><span class="line">Terminology(术语): loss function = cost function = objective function.</span><br><span class="line"></span><br><span class="line">Usual loss <span class="keyword">for</span> probability distribution: Cross entropy loss.</span><br><span class="line"></span><br><span class="line">With one-hot $w_&#123;t+j&#125;$ target, the only term left <span class="keyword">is</span> the negative log probability of the true <span class="class"><span class="keyword">class</span>.</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">通常对于概率分布选择交叉熵作为损失函数，但这里使用的向量是<span class="title">one</span>-<span class="title">hot</span>形式，此时计算结果时只有<span class="title">true</span> <span class="title">class</span> 对应的位置有值。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line">For $p(w_&#123;t+j&#125;|w_t)$ the simplest first formulation is:</span><br><span class="line"></span><br><span class="line">$$ p(o|c) = \frac&#123;exp(u_o^Tv_c)&#125;&#123;\sum_&#123;w=<span class="number">1</span>&#125;^V exp(u_w^Tv_c)&#125; $$</span><br><span class="line"></span><br><span class="line">o是context中某一个，c是center word，u对应context词向量，v是词向量。</span><br><span class="line"></span><br><span class="line">Softmax using word c to obtain probability of word o.</span><br><span class="line"></span><br><span class="line"><span class="comment">### Dot products(点积)</span></span><br><span class="line"></span><br><span class="line">$$ U^TV = U \cdot V = \sum _&#123;i=<span class="number">1</span>&#125;^n U_iV_i $$</span><br><span class="line"></span><br><span class="line">Bigger <span class="keyword">if</span> U <span class="keyword">and</span> V are more similar.</span><br><span class="line"></span><br><span class="line">先计算点积，然后放到softmax form：</span><br><span class="line"></span><br><span class="line">$$ p_i = \frac&#123;e^&#123;u_i&#125;&#125;&#123;\sum_j e^&#123;u_j&#125;&#125; $$</span><br><span class="line"></span><br><span class="line">因为点积可能为负，所以用了exp（）。并不是只能用点积，还有一些其他的方法同样可以度量两个向量之间的相似度。</span><br><span class="line"></span><br><span class="line">Softmax function：从实数空间到概率分布的标准映射方法，其中的指数函数会让较大的数变得更大，小的数变得微不足道。</span><br><span class="line"></span><br><span class="line"><span class="comment">### Skip-gram</span></span><br><span class="line"></span><br><span class="line">![SG1](/Users/fan/fw/文档/面试/CS224n/图片/NLP2<span class="number">-1.j</span>pg)</span><br><span class="line">![SG2](/Users/fan/fw/文档/面试/CS224n/图片/NLP2<span class="number">-2.j</span>pg)</span><br><span class="line"></span><br><span class="line">先用center word的词向量矩阵 W 乘以one-hot，可以得到中心词的词向量，再用context word的词向量矩阵 W<span class="string">' 去乘以中心词的词向量，得到中心词和上下文中每个词的相似度，对相似度使用softmax得到概率。用概率和每个词的one-hot做对比去计算损失。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">每个词有两个vector，一个是input vector， 一个是output vector，也就是要学习两个参数：W 和 W'</span>。对于这两个词向量，可以加起来，也可以拼接起来，作为最终的embedding。</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">	<span class="comment"># 拼接</span></span><br><span class="line">	wordVectors = np.concatenate(</span><br><span class="line">		(wordVectors[:nWords,:], wordVectors[nWords:,:]), axis=<span class="number">0</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># 加和 </span></span><br><span class="line">	wordVectors = wordVectors[:nWords,:] + wordVectors[nWords:,:]</span><br></pre></td></tr></table></figure>
+<h3 id="Objective-function-gradients"><a href="#Objective-function-gradients" class="headerlink" title="Objective function gradients"></a>Objective function gradients</h3><p>需要学习的参数 $$\theta$$ 如下：</p>
+<p><img src="/Users/fan/fw/文档/面试/CS224n/图片/NLP2-3.jpg" alt="theta"></p>
+<p>词表的大小为V，每个词向量为d维，每个词有两个向量，所以是2dV。</p>
+<p>使用梯度下降的方法优化目标函数。</p>
+<p>$$ \theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta)$$</p>
+<p>$$ J(\theta) = - \frac{1}{T} \sum_{t=1}^{T} \sum_{-m\le j \le m, j\not=0} \log p(w_{t+j}|w_t) $$</p>
+<p>$$ p(o|c) = \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} $$</p>
+<p>推导过程如下：</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} \\<br>= &amp; \frac{\partial}{\partial v_c} \log \exp(u_o^Tv_c) - \frac{\partial}{\partial v_c} \log \sum_{w=1}^V \exp(u_w^Tv_c)\\<br>\end{align}</p>
+<p>下面分两部分来计算。</p>
+<p>part 1:</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \exp(u_o^Tv_c)  \\<br>= &amp; \frac{\partial}{\partial v_c}(u_o^Tv_c) \\<br>= &amp; u_o<br>\end{align}</p>
+<p>log 和 exp 互相抵消，可以拆分出来一个一个算，可以得到上面的结果。</p>
+<p>part 2:</p>
+<p>\begin{align}<br>&amp; \frac{\partial}{\partial v_c} \log \sum_{w=1}^V \exp(u_w^Tv_c) \\<br>= &amp; \frac {1}{\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \frac{\partial}{\partial v_c} \sum _{x=1}^V \exp(u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \frac{\partial}{\partial v_c} \exp(u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \exp (u_x^Tv_c) \frac{\partial}{\partial v_c} (u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \exp (u_x^Tv_c) \cdot u_x \\<br>= &amp; \sum _{x=1}^V \frac {\exp(u_x^Tv_c)}{\sum _{w=1}^V \exp(u_w^Tv_c)} \cdot u_x \\<br>= &amp; \sum _{x=1}^V p(x|c) \cdot u_x<br>\end{align}</p>
+<p>倒数第二步，用softmax function进行了替换。</p>
+<p>合并两部分可以得到：</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} \\<br>= &amp; u_o - \sum _{x=1}^V p(x|c) \cdot u_x \\<br>= &amp; observed - expectation<br>\end{align}</p>
+<h2 id="Optimization-refresher"><a href="#Optimization-refresher" class="headerlink" title="Optimization refresher"></a>Optimization refresher</h2><p>梯度下降有批量梯度下降和随机梯度下降（SGD）。批量梯度下降每次使用所有的样本进行更新，随机梯度下降每次只使用一个样本进行更新。</p>
+<p>eg: </p>
+<p>$$f(x) = x^4-3x^3+2$$</p>
+<p>$$f’(x) = 4x^3-9x^2$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x_old = <span class="number">0</span></span><br><span class="line">x_new = <span class="number">6</span></span><br><span class="line">eps = <span class="number">0.01</span>	<span class="comment"># step size</span></span><br><span class="line">precision = <span class="number">0.0001</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f_derivative</span><span class="params">(x)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">4</span>*x**<span class="number">3</span><span class="number">-9</span>*x**<span class="number">2</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">while</span> abs(x_new - x_old) &gt; precision:</span><br><span class="line">	x_old = x_new</span><br><span class="line">	x_new = x_old - eps * f_derivative(x-old)</span><br><span class="line">print(x_new)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/06/lecture1：NLP with Deep Learning/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/14/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">FAN</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture2-Word-Vector-Representation-word2vec"><span class="nav-number">1.</span> <span class="nav-text">lecture2: Word Vector Representation: word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Word-meaning"><span class="nav-number">1.1.</span> <span class="nav-text">Word meaning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Discrete-representation-WordNet"><span class="nav-number">1.1.1.</span> <span class="nav-text">Discrete representation: WordNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Objective-function-gradients"><span class="nav-number">1.1.2.</span> <span class="nav-text">Objective function gradients</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimization-refresher"><span class="nav-number">1.2.</span> <span class="nav-text">Optimization refresher</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FAN</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
