@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CS224n,NLP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要：主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。">
+<meta name="keywords" content="CS224n,NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lecture2: Word Vector Representation: word2vec">
+<meta property="og:url" content="http://yoursite.com/2018/05/16/lecture2- Word Vector Representation- word2vec/index.html">
+<meta property="og:site_name" content="FAN">
+<meta property="og:description" content="摘要：主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-3.jpg">
+<meta property="og:updated_time" content="2018-05-16T03:08:28.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lecture2: Word Vector Representation: word2vec">
+<meta name="twitter:description" content="摘要：主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。">
+<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP2-1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/16/lecture2- Word Vector Representation- word2vec/"/>
+
+
+
+
+
+  <title>lecture2: Word Vector Representation: word2vec | FAN</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">FAN</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/16/lecture2- Word Vector Representation- word2vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FAN">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/mabel.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FAN">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">lecture2: Word Vector Representation: word2vec</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-16T09:49:24+08:00">
+                2018-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>摘要：</strong>主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。</p>
+<a id="more"></a>
+<h2 id="0-Points"><a href="#0-Points" class="headerlink" title="0 Points"></a>0 Points</h2><ul>
+<li>Word meaning</li>
+<li>Word2vec introduction</li>
+<li>Objective function gradients</li>
+<li>Optimization refresher</li>
+</ul>
+<h2 id="1-Word-meaning"><a href="#1-Word-meaning" class="headerlink" title="1 Word meaning"></a>1 Word meaning</h2><p>How do we represent the meaning of a word?</p>
+<h3 id="1-1-Discrete-representation-WordNet"><a href="#1-1-Discrete-representation-WordNet" class="headerlink" title="1.1 Discrete representation: WordNet"></a>1.1 Discrete representation: WordNet</h3><p>之前一直使用分类词典的方法，考虑一个词的上位词以及同义词的集合。常用的是WordNet这样的词库。比如在nltk中可以通过WordNet去查询一个词的上位词或同义词。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> wordnet <span class="keyword">as</span> wn</span><br><span class="line">panda = wn.synset(<span class="string">'panda.n.01'</span>)</span><br><span class="line">hyper = <span class="keyword">lambda</span> s: s.hypernyms()</span><br><span class="line">list(panda.closure(hyper))</span><br></pre></td></tr></table></figure>
+<p>Problems:</p>
+<ul>
+<li>Great as a resource but missing nuances / 同义词之间还是有微妙的差异</li>
+<li>Missing new words / 缺少新词</li>
+<li>subjective / 太过主观</li>
+<li>Requires human labor to create and adapt / 需要大量人力去整理</li>
+<li>Hard to compute accurate word similarity / 无法准确计算词语间相似度</li>
+</ul>
+<h3 id="1-2-Symbolic-representation-One-Hot"><a href="#1-2-Symbolic-representation-One-Hot" class="headerlink" title="1.2 Symbolic representation: One-Hot"></a>1.2 Symbolic representation: One-Hot</h3><p>It’s a localist representation. It has no inherent notion of similarity. Our query and document vectors are orthogonal(正交的). There is no natural notion of similarity in a set of one-hot vectors.</p>
+<p>主要问题在于one-hot是两两正交的，无法计算两个词之间的相似度。</p>
+<h3 id="1-3-Distributional-representations：Word2Vec"><a href="#1-3-Distributional-representations：Word2Vec" class="headerlink" title="1.3 Distributional representations：Word2Vec"></a>1.3 Distributional representations：Word2Vec</h3><ul>
+<li>Get a lot of value by representing a word by means of its neighbours</li>
+<li>Word meaning is defined in terms of vectors</li>
+<li>Build a dense vector for each word type, chosen so that it is good at predicting other words appearing in its context.</li>
+</ul>
+<p>将之前稀疏的向量，压缩到一个稠密的向量中来表示该词。通过调整一个单词及其上下文的单词的向量，使得我们可以通过这两个向量去计算词的相似度，或者可以预测上下文。</p>
+<h2 id="2-Word2vec-introduction"><a href="#2-Word2vec-introduction" class="headerlink" title="2 Word2vec introduction"></a>2 Word2vec introduction</h2><h3 id="2-1-Basic-idea-of-learning-neural-network-word-embeddings"><a href="#2-1-Basic-idea-of-learning-neural-network-word-embeddings" class="headerlink" title="2.1 Basic idea of learning neural network word embeddings"></a>2.1 Basic idea of learning neural network word embeddings</h3><p>Define a model aim to predict between a center word $ w_t $ and context words in terms of word vectors:</p>
+<p>$$ p(context|w_t)=\ldots $$</p>
+<p>Loss function. eg: </p>
+<p>$$ J=1-p(w_{-t}|w_t) $$ </p>
+<p>$ w_{-t} $ 表示 $ w_t $ 的上下文，在语料库中进行训练，最小化损失函数。</p>
+<h3 id="2-2-Directly-learning-low-dimonsional-word-vectors"><a href="#2-2-Directly-learning-low-dimonsional-word-vectors" class="headerlink" title="2.2 Directly learning low-dimonsional word vectors"></a>2.2 Directly learning low-dimonsional word vectors</h3><p>Old idea:</p>
+<ul>
+<li>Back-propagating errors (Rumelhart et al., 1986)</li>
+<li>A nerual probabilistic language model (Bengio et al., 2003)</li>
+<li>NLP from scratch (Collobert &amp; Weston, 2008)</li>
+<li>Word2vec (Mikolov et al., 2013) </li>
+</ul>
+<h3 id="2-3-Main-idea-of-word2vec"><a href="#2-3-Main-idea-of-word2vec" class="headerlink" title="2.3 Main idea of word2vec"></a>2.3 Main idea of word2vec</h3><p>Predict between every word and its context words.</p>
+<p>Two algorithms:</p>
+<ul>
+<li>Skip-gram (SG) : 预测上下文</li>
+<li>Continuous Bag of Words (COBW) : 预测目标单词</li>
+</ul>
+<p>Two training methods:</p>
+<ul>
+<li>Hierarchical softmax</li>
+<li>Negative sampling</li>
+</ul>
+<p>课程中讲解了 SG 和 Naive softmax。</p>
+<h2 id="3-Objective-function-gradients"><a href="#3-Objective-function-gradients" class="headerlink" title="3 Objective function gradients"></a>3 Objective function gradients</h2><h3 id="3-1-Word2vec-Details"><a href="#3-1-Word2vec-Details" class="headerlink" title="3.1 Word2vec Details"></a>3.1 Word2vec Details</h3><p>SG 算法通过当前的 word 去预测上下文的 word ， 它是一个词袋模型，不考虑顺序，所以只有一个条件分布。学习就是要最大化这些概率。</p>
+<p>For each word $ t=1\ldots T $, predict surrounding words in a window of “radius” $m$ of every word. </p>
+<p>Objective function: Maximize the probability of any context word given the current center word:</p>
+<p>$$ J’(\theta) = \prod_{t=1}^T \prod_{-m\le j \le m, j \not= 0} p(w_{t+j} | w_t, \theta) $$</p>
+<p>Where $\theta$ represents all variables we will optimize.</p>
+<p>一篇文章中一共有T个词，每个词取前后m个词作为context，$\theta$所有词的vector，后面有讲到。目标函数使得整体的概率乘积最大化。</p>
+<p>Negative log likelihood (似然估计):</p>
+<p>$$ J(\theta) = - \frac{1}{T} \sum_{t=1}^{T} \sum_{-m\le j \le m, j\not=0} \log p(w_{t+j}|w_t) $$</p>
+<p>公式里的 1/T 是为了求平均，normalization。负号是为了将目标函数最大化变成最小化，swap between maximizing and minimizing。在后面的计算中，log 的底数取e， 等于ln。</p>
+<h3 id="3-2-The-objective-function-details"><a href="#3-2-The-objective-function-details" class="headerlink" title="3.2 The objective function details"></a>3.2 The objective function details</h3><p>Terminology(术语): loss function = cost function = objective function.</p>
+<p>Usual loss for probability distribution: Cross entropy loss.</p>
+<p>With one-hot $w_{t+j}$ target, the only term left is the negative log probability of the true class.</p>
+<p>通常对于概率分布选择交叉熵作为损失函数，但这里使用的向量是one-hot形式，此时计算结果时只有true class 对应的位置有值。</p>
+<p>For $p(w_{t+j}|w_t)$ the simplest first formulation is:</p>
+<p>$$ p(o|c) = \frac{exp(u_o^Tv_c)}{\sum_{w=1}^V exp(u_w^Tv_c)} $$</p>
+<p>o是context中某一个，c是center word，u对应context词向量，v是词向量。</p>
+<p>Softmax using word c to obtain probability of word o.</p>
+<h3 id="3-3-Dot-products-点积"><a href="#3-3-Dot-products-点积" class="headerlink" title="3.3 Dot products(点积)"></a>3.3 Dot products(点积)</h3><p>$$ U^TV = U \cdot V = \sum _{i=1}^n U_iV_i $$</p>
+<p>Bigger if U and V are more similar.</p>
+<p>先计算点积，然后放到softmax form：</p>
+<p>$$ p_i = \frac{e^{u_i}}{\sum_j e^{u_j}} $$</p>
+<p>因为点积可能为负，所以用了exp（）。并不是只能用点积，还有一些其他的方法同样可以度量两个向量之间的相似度。</p>
+<p>Softmax function：从实数空间到概率分布的标准映射方法，其中的指数函数会让较大的数变得更大，小的数变得微不足道。</p>
+<h3 id="3-4-Skip-gram"><a href="#3-4-Skip-gram" class="headerlink" title="3.4 Skip-gram"></a>3.4 Skip-gram</h3><p><img src="/images/CS224N/NLP2-1.jpg" alt="SG1"><br><img src="/images/CS224N/NLP2-2.jpg" alt="SG2"></p>
+<p>先用center word的词向量矩阵 W 乘以one-hot，可以得到中心词的词向量，再用context word的词向量矩阵 W’ 去乘以中心词的词向量，得到中心词和上下文中每个词的相似度，对相似度使用softmax得到概率。用概率和每个词的one-hot做对比去计算损失。</p>
+<p>每个词有两个vector，一个是input vector， 一个是output vector，也就是要学习两个参数：W 和 W’。对于这两个词向量，可以加起来，也可以拼接起来，作为最终的embedding。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拼接</span></span><br><span class="line">wordVectors = np.concatenate(</span><br><span class="line">	(wordVectors[:nWords,:], wordVectors[nWords:,:]), axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加和 </span></span><br><span class="line">wordVectors = wordVectors[:nWords,:] + wordVectors[nWords:,:]</span><br></pre></td></tr></table></figure>
+<h3 id="3-5-Objective-function-gradients"><a href="#3-5-Objective-function-gradients" class="headerlink" title="3.5 Objective function gradients"></a>3.5 Objective function gradients</h3><p>需要学习的参数 $\theta$ 如下：</p>
+<p><img src="/images/CS224N/NLP2-3.jpg" alt="theta"></p>
+<p>词表的大小为V，每个词向量为d维，每个词有两个向量，所以是2dV。</p>
+<p>使用梯度下降的方法优化目标函数。</p>
+<p>$$ \theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta)$$</p>
+<p>$$ J(\theta) = - \frac{1}{T} \sum_{t=1}^{T} \sum_{-m\le j \le m, j\not=0} \log p(w_{t+j}|w_t) $$</p>
+<p>$$ p(o|c) = \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} $$</p>
+<p>推导过程如下：</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} \\<br>= &amp; \frac{\partial}{\partial v_c} \log \exp(u_o^Tv_c) - \frac{\partial}{\partial v_c} \log \sum_{w=1}^V \exp(u_w^Tv_c)\\<br>\end{align}</p>
+<p>下面分两部分来计算。</p>
+<p>part 1:</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \exp(u_o^Tv_c)  \\<br>= &amp; \frac{\partial}{\partial v_c}(u_o^Tv_c) \\<br>= &amp; u_o<br>\end{align}</p>
+<p>log 和 exp 互相抵消，可以拆分出来一个一个算，可以得到上面的结果。</p>
+<p>part 2:</p>
+<p>\begin{align}<br>&amp; \frac{\partial}{\partial v_c} \log \sum_{w=1}^V \exp(u_w^Tv_c) \\<br>= &amp; \frac {1}{\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \frac{\partial}{\partial v_c} \sum _{x=1}^V \exp(u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \frac{\partial}{\partial v_c} \exp(u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \exp (u_x^Tv_c) \frac{\partial}{\partial v_c} (u_x^Tv_c) \\<br>= &amp; \frac {1} {\sum_{w=1}^V \exp(u_w^Tv_c)} \cdot \sum _{x=1}^V \exp (u_x^Tv_c) \cdot u_x \\<br>= &amp; \sum _{x=1}^V \frac {\exp(u_x^Tv_c)}{\sum _{w=1}^V \exp(u_w^Tv_c)} \cdot u_x \\<br>= &amp; \sum _{x=1}^V p(x|c) \cdot u_x<br>\end{align}</p>
+<p>倒数第二步，用softmax function进行了替换。</p>
+<p>合并两部分可以得到：</p>
+<p>\begin{align}<br>&amp;\frac{\partial}{\partial v_c} \log \frac{\exp(u_o^Tv_c)}{\sum_{w=1}^V \exp(u_w^Tv_c)} \\<br>= &amp; u_o - \sum _{x=1}^V p(x|c) \cdot u_x \\<br>= &amp; observed - expectation<br>\end{align}</p>
+<h2 id="4-Optimization-refresher"><a href="#4-Optimization-refresher" class="headerlink" title="4 Optimization refresher"></a>4 Optimization refresher</h2><p>梯度下降有批量梯度下降和随机梯度下降（SGD）。批量梯度下降每次使用所有的样本进行更新，随机梯度下降每次只使用一个样本进行更新。</p>
+<p>eg: </p>
+<p>$$f(x) = x^4-3x^3+2$$</p>
+<p>$$f’(x) = 4x^3-9x^2$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x_old = <span class="number">0</span></span><br><span class="line">x_new = <span class="number">6</span></span><br><span class="line">eps = <span class="number">0.01</span>	<span class="comment"># step size</span></span><br><span class="line">precision = <span class="number">0.0001</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f_derivative</span><span class="params">(x)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">4</span>*x**<span class="number">3</span><span class="number">-9</span>*x**<span class="number">2</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">while</span> abs(x_new - x_old) &gt; precision:</span><br><span class="line">	x_old = x_new</span><br><span class="line">	x_new = x_old - eps * f_derivative(x-old)</span><br><span class="line">print(x_new)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS224n/" rel="tag"># CS224n</a>
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/16/lecture1：NLP with Deep Learning/" rel="prev" title="lecture1：NLP with Deep Learning">
+                lecture1：NLP with Deep Learning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/mabel.jpeg"
+                alt="FAN" />
+            
+              <p class="site-author-name" itemprop="name">FAN</p>
+              <p class="site-description motion-element" itemprop="description">我不生产代码，我只是github的搬运工</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-Points"><span class="nav-text">0 Points</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Word-meaning"><span class="nav-text">1 Word meaning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Discrete-representation-WordNet"><span class="nav-text">1.1 Discrete representation: WordNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Symbolic-representation-One-Hot"><span class="nav-text">1.2 Symbolic representation: One-Hot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Distributional-representations：Word2Vec"><span class="nav-text">1.3 Distributional representations：Word2Vec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Word2vec-introduction"><span class="nav-text">2 Word2vec introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Basic-idea-of-learning-neural-network-word-embeddings"><span class="nav-text">2.1 Basic idea of learning neural network word embeddings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Directly-learning-low-dimonsional-word-vectors"><span class="nav-text">2.2 Directly learning low-dimonsional word vectors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Main-idea-of-word2vec"><span class="nav-text">2.3 Main idea of word2vec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Objective-function-gradients"><span class="nav-text">3 Objective function gradients</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Word2vec-Details"><span class="nav-text">3.1 Word2vec Details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-The-objective-function-details"><span class="nav-text">3.2 The objective function details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Dot-products-点积"><span class="nav-text">3.3 Dot products(点积)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Skip-gram"><span class="nav-text">3.4 Skip-gram</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-Objective-function-gradients"><span class="nav-text">3.5 Objective function gradients</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Optimization-refresher"><span class="nav-text">4 Optimization refresher</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FAN</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
