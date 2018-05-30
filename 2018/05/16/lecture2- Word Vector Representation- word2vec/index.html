@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="FAN">
 <meta property="og:description" content="摘要：主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-1.jpg">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-2.jpg">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-3.jpg">
-<meta property="og:updated_time" content="2018-05-16T03:08:28.053Z">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-1">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-2">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP2-3">
+<meta property="og:updated_time" content="2018-05-30T06:07:04.203Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lecture2: Word Vector Representation: word2vec">
 <meta name="twitter:description" content="摘要：主要介绍了词的常用表示方法，重点介绍了word2vec。word2vec包括SG算法和COBW算法，本课只讲解了SG算法。主要有SG算法的思想以及使用梯度下降优化的过程。">
-<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP2-1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP2-1">
 
 
 
@@ -428,12 +428,12 @@
 <p>$$ p_i = \frac{e^{u_i}}{\sum_j e^{u_j}} $$</p>
 <p>因为点积可能为负，所以用了exp（）。并不是只能用点积，还有一些其他的方法同样可以度量两个向量之间的相似度。</p>
 <p>Softmax function：从实数空间到概率分布的标准映射方法，其中的指数函数会让较大的数变得更大，小的数变得微不足道。</p>
-<h3 id="3-4-Skip-gram"><a href="#3-4-Skip-gram" class="headerlink" title="3.4 Skip-gram"></a>3.4 Skip-gram</h3><p><img src="/images/CS224N/NLP2-1.jpg" alt="SG1"><br><img src="/images/CS224N/NLP2-2.jpg" alt="SG2"></p>
+<h3 id="3-4-Skip-gram"><a href="#3-4-Skip-gram" class="headerlink" title="3.4 Skip-gram"></a>3.4 Skip-gram</h3><p><img src="/images/CS224N/NLP2-1" alt="SG1"><br><img src="/images/CS224N/NLP2-2" alt="SG2"></p>
 <p>先用center word的词向量矩阵 W 乘以one-hot，可以得到中心词的词向量，再用context word的词向量矩阵 W’ 去乘以中心词的词向量，得到中心词和上下文中每个词的相似度，对相似度使用softmax得到概率。用概率和每个词的one-hot做对比去计算损失。</p>
 <p>每个词有两个vector，一个是input vector， 一个是output vector，也就是要学习两个参数：W 和 W’。对于这两个词向量，可以加起来，也可以拼接起来，作为最终的embedding。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拼接</span></span><br><span class="line">wordVectors = np.concatenate(</span><br><span class="line">	(wordVectors[:nWords,:], wordVectors[nWords:,:]), axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加和 </span></span><br><span class="line">wordVectors = wordVectors[:nWords,:] + wordVectors[nWords:,:]</span><br></pre></td></tr></table></figure>
 <h3 id="3-5-Objective-function-gradients"><a href="#3-5-Objective-function-gradients" class="headerlink" title="3.5 Objective function gradients"></a>3.5 Objective function gradients</h3><p>需要学习的参数 $\theta$ 如下：</p>
-<p><img src="/images/CS224N/NLP2-3.jpg" alt="theta"></p>
+<p><img src="/images/CS224N/NLP2-3" alt="theta"></p>
 <p>词表的大小为V，每个词向量为d维，每个词有两个向量，所以是2dV。</p>
 <p>使用梯度下降的方法优化目标函数。</p>
 <p>$$ \theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta)$$</p>
@@ -575,7 +575,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

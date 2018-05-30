@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CS224n,NLP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
+<meta name="keywords" content="CS224n,NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lecture3: GloVe: Global Vectors for Word Representation">
+<meta property="og:url" content="http://yoursite.com/2018/05/30/lecture3- GloVe- Global Vectors for Word Representation/index.html">
+<meta property="og:site_name" content="FAN">
+<meta property="og:description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-1">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-2">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-3">
+<meta property="og:updated_time" content="2018-05-30T06:42:08.043Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lecture3: GloVe: Global Vectors for Word Representation">
+<meta name="twitter:description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
+<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP3-1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/30/lecture3- GloVe- Global Vectors for Word Representation/"/>
+
+
+
+
+
+  <title>lecture3: GloVe: Global Vectors for Word Representation | FAN</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">FAN</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/30/lecture3- GloVe- Global Vectors for Word Representation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FAN">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/mabel.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="FAN">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">lecture3: GloVe: Global Vectors for Word Representation</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-30T14:36:36+08:00">
+                2018-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>摘要：</strong>本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。</p>
+<a id="more"></a>
+<h2 id="0-Points"><a href="#0-Points" class="headerlink" title="0 Points"></a>0 Points</h2><ul>
+<li>A Deeper look at Word Vector</li>
+<li>GloVe: Combining the best of both worlds</li>
+<li>Evaluation</li>
+<li>Application</li>
+</ul>
+<h2 id="1-A-Deeper-look-at-Word-Vector"><a href="#1-A-Deeper-look-at-Word-Vector" class="headerlink" title="1 A Deeper look at Word Vector"></a>1 A Deeper look at Word Vector</h2><h3 id="1-1-Review"><a href="#1-1-Review" class="headerlink" title="1.1 Review"></a>1.1 Review</h3><ul>
+<li>What does word2vec capture?</li>
+<li>How could we capture this essence more effectively?</li>
+<li>How can we analyze word vectors?</li>
+</ul>
+<p>虽然单词可能很多，维度可能很大，但是每次更新只需要更新window里面的，最多有2*m+1个参数。</p>
+<p>This cost function is not convex(凸)。只要用足够小的步子去训练，是可以最终优化的。</p>
+<p>We may as well only update the word vectors that actually appear.</p>
+<p>Solution:either you need sparse matrix update operations to only update certain columns of full embedding matrices U and V, or you need to keep around a hash for word vectors.(稀疏矩阵或者建立hash表)</p>
+<p>If you have millions of word vectors and do distributed computing, it is important to not have to send gigantic updates around</p>
+<p>Implement SG with negative sampling.</p>
+<p>Main idea: train binary logistic regressions for a true pair(center word and word in its context window) versus a couple of noise pairs(the center word paired with a random word).</p>
+<h3 id="1-2-The-skip-gram-model-and-negative-sampling"><a href="#1-2-The-skip-gram-model-and-negative-sampling" class="headerlink" title="1.2 The skip-gram model and negative sampling"></a>1.2 The skip-gram model and negative sampling</h3><p>paper: Distributed Representations of Words and Phrases and their Compositionality. (Mikolov et al. 2013)</p>
+<p>Overall objective function: </p>
+<p>$$J(\theta) = \frac {1} {T} \sum _{t=1} ^ T J _t (\theta)$$</p>
+<p>$$J _t (\theta) = \log \sigma (u_o^Tv_c) + \sum _{i=1} ^ k \mathbb{E} _{w_i \sim P_n(w)} [\log \sigma(-v’^{\top}_{w_i} v_{w_I}]$$</p>
+<p>Slightly clearer notation:</p>
+<p>$$J _t (\theta) = \log \sigma (u_o^Tv_c) + \sum <em>{j \sim P(w)} [\log \sigma(-u^{\top}</em>{j} v_c]$$</p>
+<p>最大化正样本概率和最小化负样本概率。maximize probability that real outside word appears, minimize prob. that random words appear around center word</p>
+<p>采样服从 unigram distribution。 $ P(w) = \frac {U(w) ^ \frac {3}{4}} {Z} $。 The power makes less frequent words be sampled more often</p>
+<h3 id="1-3-The-continuous-bags-of-words-model"><a href="#1-3-The-continuous-bags-of-words-model" class="headerlink" title="1.3 The continuous bags of words model"></a>1.3 The continuous bags of words model</h3><p><strong>Main idea:</strong> Predict center word from sum of surrounding word vectors instead of predicting surrounding single words form center word as in SG model.</p>
+<h3 id="1-4-Summary-of-word2vec"><a href="#1-4-Summary-of-word2vec" class="headerlink" title="1.4 Summary of word2vec"></a>1.4 Summary of word2vec</h3><ul>
+<li>Go through each word of the whole corpus</li>
+<li>Predict surrounding words of each word</li>
+<li>This captures cooccurrence of words one at a time</li>
+</ul>
+<p>Capture cooccurrence counts directly: 2 options, windows vs full document</p>
+<ul>
+<li>windows: similar to word2vec, use window around each word, captures both syntactic and semantic information.</li>
+<li>word-document co-occurrence matrix will give general topics leading to “Latent Semantic Analysis”.</li>
+</ul>
+<h3 id="1-5-Example-Window-based-co-occurrence-matrix"><a href="#1-5-Example-Window-based-co-occurrence-matrix" class="headerlink" title="1.5 Example: Window based co-occurrence matrix"></a>1.5 Example: Window based co-occurrence matrix</h3><ul>
+<li>window length 1. (more common: 5-10)</li>
+<li>Symmetric (irrelevant whether left or right context)</li>
+<li>example corpus:<ul>
+<li>I like deep learning.</li>
+<li>I like NLP.</li>
+<li>I enjoy flying.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>counts</th>
+<th>I</th>
+<th>like</th>
+<th>enjoy</th>
+<th>deep</th>
+<th>learning</th>
+<th>NLP</th>
+<th>flying</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>like</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>enjoy</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>deep</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>learning</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>flying</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>.</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>probelms:</strong></p>
+<ul>
+<li>increase in size with vocabulary</li>
+<li>very high dimensional: require a lot of storage</li>
+<li>subsequent classification models have sparsity issues</li>
+<li>models are less robust</li>
+</ul>
+<p><strong>Using low dimensions:</strong></p>
+<p>Dimensionality reduction(降维) on X: SVD(Singular Value Decomposition) 奇异值分解</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">	</span><br><span class="line">la = np.linalg</span><br><span class="line">words = [<span class="string">"I"</span>, <span class="string">"like"</span>, <span class="string">"enjoy"</span>, <span class="string">"deep"</span>, <span class="string">"learning"</span>, <span class="string">"NLP"</span>, <span class="string">"flying"</span>, <span class="string">"."</span>]</span><br><span class="line">X = np.array([</span><br><span class="line">    [<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">])</span><br><span class="line">	</span><br><span class="line">U, s, Vh = la.svd(X, full_matrices=<span class="keyword">False</span>)</span><br><span class="line">	</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(words)):</span><br><span class="line">    plt.text(U[i, <span class="number">0</span>], U[i, <span class="number">1</span>], words[i])</span><br><span class="line">	</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/CS224N/NLP3-1" alt="3-1"></p>
+<p>Problems with SVD:</p>
+<p>Computational cost scales quadratically for n x m matrix.</p>
+<p>Hard to incorporate new words or documents.</p>
+<p>Different learning regime than other DL models.</p>
+<h3 id="1-6-Count-based-vs-direct-prediction"><a href="#1-6-Count-based-vs-direct-prediction" class="headerlink" title="1.6 Count based vs direct prediction"></a>1.6 Count based vs direct prediction</h3><p>Count based:</p>
+<ul>
+<li>LSA, HAL</li>
+<li>COALS, Hellinger-PCA</li>
+<li>Fast training</li>
+<li>Efficient usage of statistics</li>
+<li>Primarily used to capture word similarity</li>
+<li>Disproportionate importance given to large counts</li>
+</ul>
+<p>Direct prediction:</p>
+<ul>
+<li>Skip-gram/CBOW</li>
+<li>NNLM, HLBL, RNN</li>
+<li>Scale with corpus size</li>
+<li>Inefficient usage of statistics</li>
+<li>Generate improved performance on other tasks</li>
+<li>Can capture complex patterns beyond word similarity</li>
+</ul>
+<h2 id="2-GloVe-Combining-the-best-of-both-worlds"><a href="#2-GloVe-Combining-the-best-of-both-worlds" class="headerlink" title="2 GloVe: Combining the best of both worlds"></a>2 GloVe: Combining the best of both worlds</h2><h3 id="2-1-Loss-Function"><a href="#2-1-Loss-Function" class="headerlink" title="2.1 Loss Function"></a>2.1 Loss Function</h3><p>$$J(\theta) = \frac{1}{2} \sum <em>{i,j=1} ^W f(P</em>{ij}) (u^{\top}_i v_j - \log P_{ij})^2$$</p>
+<p>P is co-occurrence matrix. 比起使用SVD，这个function每次只优化一个值</p>
+<ul>
+<li>Fast training</li>
+<li>Scalable to huge corpora</li>
+<li>Good performance even with small corpus, and small vectors</li>
+<li>By Pennington, Socher, Manning(2014)</li>
+</ul>
+<h3 id="2-2-What-to-do-with-the-two-sets-of-vectors"><a href="#2-2-What-to-do-with-the-two-sets-of-vectors" class="headerlink" title="2.2 What to do with the two sets of vectors?"></a>2.2 What to do with the two sets of vectors?</h3><p>We end up with U and V from all the vectors u and v</p>
+<p>Both capture similar co-occurrence information. It turns out, the best solution is to simply sum them up: X = U + V</p>
+<p>One of many hyperparameters explored in GloVe: Global Vectors for Word Representation, Pennington et al.(2014)</p>
+<h2 id="3-Evaluation"><a href="#3-Evaluation" class="headerlink" title="3 Evaluation"></a>3 Evaluation</h2><h3 id="3-1-Two-Evaluation"><a href="#3-1-Two-Evaluation" class="headerlink" title="3.1 Two Evaluation"></a>3.1 Two Evaluation</h3><p>Intrinsic vs extrinsic</p>
+<p>Intrinsic: Evaluation on a specific/intermediate subtask</p>
+<p>内部：专门设计单独的实验。计算快，但是知识针对专门设计的实验，对实际应用是否有帮助不好说。</p>
+<ul>
+<li>Fast to compute</li>
+<li>Helps to understand that system </li>
+<li>Not clear if really helpful unless correlation to real task is established</li>
+</ul>
+<p>Extrinsic: Evaluation on a real task</p>
+<p>外部：通过实际应用是否有提升来测评。耗时长，不能明确是子系统的问题还是词向量的问题，至少需要两个子系统同时证明效果。</p>
+<ul>
+<li>Can take a long time to compute accuracy</li>
+<li>Unclear if the subsystem is the problem or its interaction or other subsystems</li>
+<li>If replacing exactly one subsystem with another improves accuracy</li>
+</ul>
+<h3 id="3-2-Intrinsic-Word-Vector-Evaluation"><a href="#3-2-Intrinsic-Word-Vector-Evaluation" class="headerlink" title="3.2 Intrinsic Word Vector Evaluation"></a>3.2 Intrinsic Word Vector Evaluation</h3><p><strong>Evaluation1: Word Vector Analogies</strong>:</p>
+<p>eg: man:woman::king:?  通过夹角余弦得到。</p>
+<p>Evaluate word vectors by how well their consine distance after addition captures intuitive semantic and syntactic analogy questions</p>
+<p>Analogy evaluation and hyperparameters:</p>
+<p>best dimensions: ~300, slight drop off afterwards.But this might be different for downstream tasks.</p>
+<p>Windows size of 8 around each center word is good for GloVe vectors.</p>
+<p><img src="/images/CS224N/NLP3-2" alt="3-2"></p>
+<p>More training time helps. More data helps, wikipedia is better than news text.</p>
+<p><img src="/images/CS224N/NLP3-3" alt="3-3"></p>
+<p><strong>Evaluation 2: Word Vector distances and their correlation with human judgments</strong></p>
+<p>直接人工标注词语的相似度</p>
+<h3 id="3-3-Extrinsic-word-vector-evaluation"><a href="#3-3-Extrinsic-word-vector-evaluation" class="headerlink" title="3.3 Extrinsic word vector evaluation"></a>3.3 Extrinsic word vector evaluation</h3><p>eg: NER, good word vectors should help directly</p>
+<h2 id="4-Application"><a href="#4-Application" class="headerlink" title="4 Application"></a>4 Application</h2><p>Single word classification</p>
+<p>Find most positive/negtive words in corpus</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS224n/" rel="tag"># CS224n</a>
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/reprezentation/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/mabel.jpeg"
+                alt="FAN" />
+            
+              <p class="site-author-name" itemprop="name">FAN</p>
+              <p class="site-description motion-element" itemprop="description">我不生产代码，我只是github的搬运工</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-Points"><span class="nav-text">0 Points</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-A-Deeper-look-at-Word-Vector"><span class="nav-text">1 A Deeper look at Word Vector</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Review"><span class="nav-text">1.1 Review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-The-skip-gram-model-and-negative-sampling"><span class="nav-text">1.2 The skip-gram model and negative sampling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-The-continuous-bags-of-words-model"><span class="nav-text">1.3 The continuous bags of words model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-Summary-of-word2vec"><span class="nav-text">1.4 Summary of word2vec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-Example-Window-based-co-occurrence-matrix"><span class="nav-text">1.5 Example: Window based co-occurrence matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-Count-based-vs-direct-prediction"><span class="nav-text">1.6 Count based vs direct prediction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-GloVe-Combining-the-best-of-both-worlds"><span class="nav-text">2 GloVe: Combining the best of both worlds</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Loss-Function"><span class="nav-text">2.1 Loss Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-What-to-do-with-the-two-sets-of-vectors"><span class="nav-text">2.2 What to do with the two sets of vectors?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Evaluation"><span class="nav-text">3 Evaluation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Two-Evaluation"><span class="nav-text">3.1 Two Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Intrinsic-Word-Vector-Evaluation"><span class="nav-text">3.2 Intrinsic Word Vector Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Extrinsic-word-vector-evaluation"><span class="nav-text">3.3 Extrinsic word vector evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Application"><span class="nav-text">4 Application</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FAN</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
