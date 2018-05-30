@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-1.png">
 <meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-2.jpg">
 <meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-3.jpg">
-<meta property="og:updated_time" content="2018-05-30T07:47:12.356Z">
+<meta property="og:updated_time" content="2018-05-30T08:05:29.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lecture3: GloVe: Global Vectors for Word Representation">
 <meta name="twitter:description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
@@ -379,9 +379,9 @@
 <h3 id="1-2-The-skip-gram-model-and-negative-sampling"><a href="#1-2-The-skip-gram-model-and-negative-sampling" class="headerlink" title="1.2 The skip-gram model and negative sampling"></a>1.2 The skip-gram model and negative sampling</h3><p>paper: Distributed Representations of Words and Phrases and their Compositionality. (Mikolov et al. 2013)</p>
 <p>Overall objective function: </p>
 <p>$$J(\theta) = \frac {1} {T} \sum _{t=1} ^ T J _t (\theta)$$</p>
-<p>$$J _t (\theta) = \log \sigma (u_o^Tv_c) + \sum _{i=1} ^ k \mathbb{E} _{w_i \sim P_n(w)} [\log \sigma(-v’^{\top}_{w_i} v_{w_I}]$$</p>
+<p>$$J _t (\theta) = \log \sigma (u_o^Tv_c) + \sum _{i=1} ^ k \mathbb{E} _{w_i \sim P_n(w)} [\log \sigma(-v’^{\top}_{w_i} v_{w_I} )]$$</p>
 <p>Slightly clearer notation:</p>
-<p>$$J_t (\theta) = \log \sigma (u_o^Tv_c) + \sum_{j \sim P(w)} [\log \sigma(-u^{\top}_{j} v_c]$$</p>
+<p>$$J_t (\theta) = \log \sigma (u_o^Tv_c) + \sum_{j \sim P(w)} [\log \sigma(-u^{\top}_{j} v_c)]$$</p>
 <p>最大化正样本概率和最小化负样本概率。maximize probability that real outside word appears, minimize prob. that random words appear around center word</p>
 <p>采样服从 unigram distribution。 $ P(w) = \frac {U(w) ^ \frac {3}{4}} {Z} $。 The power makes less frequent words be sampled more often</p>
 <h3 id="1-3-The-continuous-bags-of-words-model"><a href="#1-3-The-continuous-bags-of-words-model" class="headerlink" title="1.3 The continuous bags of words model"></a>1.3 The continuous bags of words model</h3><p><strong>Main idea:</strong> Predict center word from sum of surrounding word vectors instead of predicting surrounding single words form center word as in SG model.</p>
