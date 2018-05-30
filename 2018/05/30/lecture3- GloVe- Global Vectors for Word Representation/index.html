@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="FAN">
 <meta property="og:description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-1">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-2">
-<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-3">
-<meta property="og:updated_time" content="2018-05-30T06:42:08.043Z">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-1.png">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/CS224N/NLP3-3.jpg">
+<meta property="og:updated_time" content="2018-05-30T06:50:34.908Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lecture3: GloVe: Global Vectors for Word Representation">
 <meta name="twitter:description" content="摘要：本节内容回顾了上节的SG算法，并针对一些实现细节进行了描述，比如负采样。简单讲解了GloVe算法的思路，词向量的评价指标，以及适合词向量去做的一些应用。">
-<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP3-1">
+<meta name="twitter:image" content="http://yoursite.com/images/CS224N/NLP3-1.png">
 
 
 
@@ -518,7 +518,7 @@
 <p><strong>Using low dimensions:</strong></p>
 <p>Dimensionality reduction(降维) on X: SVD(Singular Value Decomposition) 奇异值分解</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">	</span><br><span class="line">la = np.linalg</span><br><span class="line">words = [<span class="string">"I"</span>, <span class="string">"like"</span>, <span class="string">"enjoy"</span>, <span class="string">"deep"</span>, <span class="string">"learning"</span>, <span class="string">"NLP"</span>, <span class="string">"flying"</span>, <span class="string">"."</span>]</span><br><span class="line">X = np.array([</span><br><span class="line">    [<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">])</span><br><span class="line">	</span><br><span class="line">U, s, Vh = la.svd(X, full_matrices=<span class="keyword">False</span>)</span><br><span class="line">	</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(words)):</span><br><span class="line">    plt.text(U[i, <span class="number">0</span>], U[i, <span class="number">1</span>], words[i])</span><br><span class="line">	</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="/images/CS224N/NLP3-1" alt="3-1"></p>
+<p><img src="/images/CS224N/NLP3-1.png" alt="3-1"></p>
 <p>Problems with SVD:</p>
 <p>Computational cost scales quadratically for n x m matrix.</p>
 <p>Hard to incorporate new words or documents.</p>
@@ -573,9 +573,9 @@
 <p>Analogy evaluation and hyperparameters:</p>
 <p>best dimensions: ~300, slight drop off afterwards.But this might be different for downstream tasks.</p>
 <p>Windows size of 8 around each center word is good for GloVe vectors.</p>
-<p><img src="/images/CS224N/NLP3-2" alt="3-2"></p>
+<p><img src="/images/CS224N/NLP3-2.jpg" alt="3-2"></p>
 <p>More training time helps. More data helps, wikipedia is better than news text.</p>
-<p><img src="/images/CS224N/NLP3-3" alt="3-3"></p>
+<p><img src="/images/CS224N/NLP3-3.jpg" alt="3-3"></p>
 <p><strong>Evaluation 2: Word Vector distances and their correlation with human judgments</strong></p>
 <p>直接人工标注词语的相似度</p>
 <h3 id="3-3-Extrinsic-word-vector-evaluation"><a href="#3-3-Extrinsic-word-vector-evaluation" class="headerlink" title="3.3 Extrinsic word vector evaluation"></a>3.3 Extrinsic word vector evaluation</h3><p>eg: NER, good word vectors should help directly</p>
@@ -613,8 +613,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/24/reprezentation/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/05/16/lecture2- Word Vector Representation- word2vec/" rel="next" title="lecture2: Word Vector Representation: word2vec">
+                <i class="fa fa-chevron-left"></i> lecture2: Word Vector Representation: word2vec
               </a>
             
           </div>
@@ -702,7 +702,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
