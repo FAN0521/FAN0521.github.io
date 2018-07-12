@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="摘要：一条包含字母 A-Z 的消息通过以下方式进行了编码： ‘A’ -&amp;gt; 1‘B’ -&amp;gt; 2…‘Z’ -&amp;gt; 26 给定一个只包含数字的非空字符串，请计算解码方法的总数。">
+<meta name="description" content="摘要：给定一个 m × n 的网格和一个球。球的起始坐标为 (i,j) ，你可以将球移到相邻的单元格内，或者往上、下、左、右四个方向上移动使球穿过网格边界。但是，你最多可以移动 N 次。找出可以将球移出边界的路径数量。答案可能非常大，返回 结果 mod 109 + 7 的值。">
 <meta name="keywords" content="DP,LeetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode:解码方法">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/LeetCode-解码方法/index.html">
+<meta property="og:title" content="LeetCode:出界的路径数">
+<meta property="og:url" content="http://yoursite.com/2018/07/04/LeetCode-出界的路径数/index.html">
 <meta property="og:site_name" content="FAN">
-<meta property="og:description" content="摘要：一条包含字母 A-Z 的消息通过以下方式进行了编码： ‘A’ -&amp;gt; 1‘B’ -&amp;gt; 2…‘Z’ -&amp;gt; 26 给定一个只包含数字的非空字符串，请计算解码方法的总数。">
+<meta property="og:description" content="摘要：给定一个 m × n 的网格和一个球。球的起始坐标为 (i,j) ，你可以将球移到相邻的单元格内，或者往上、下、左、右四个方向上移动使球穿过网格边界。但是，你最多可以移动 N 次。找出可以将球移出边界的路径数量。答案可能非常大，返回 结果 mod 109 + 7 的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-04T05:45:04.655Z">
+<meta property="og:updated_time" content="2018-07-04T08:17:57.317Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode:解码方法">
-<meta name="twitter:description" content="摘要：一条包含字母 A-Z 的消息通过以下方式进行了编码： ‘A’ -&amp;gt; 1‘B’ -&amp;gt; 2…‘Z’ -&amp;gt; 26 给定一个只包含数字的非空字符串，请计算解码方法的总数。">
+<meta name="twitter:title" content="LeetCode:出界的路径数">
+<meta name="twitter:description" content="摘要：给定一个 m × n 的网格和一个球。球的起始坐标为 (i,j) ，你可以将球移到相邻的单元格内，或者往上、下、左、右四个方向上移动使球穿过网格边界。但是，你最多可以移动 N 次。找出可以将球移出边界的路径数量。答案可能非常大，返回 结果 mod 109 + 7 的值。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/LeetCode-解码方法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/04/LeetCode-出界的路径数/"/>
 
 
 
 
 
-  <title>LeetCode:解码方法 | FAN</title>
+  <title>LeetCode:出界的路径数 | FAN</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/LeetCode-解码方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/LeetCode-出界的路径数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FAN">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LeetCode:解码方法</h1>
+          <h1 class="post-title" itemprop="name headline">LeetCode:出界的路径数</h1>
         
 
         <div class="post-meta">
@@ -282,7 +282,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T11:02:00+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T14:13:00+08:00">
                 2018-07-04
               </time>
             
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/04/LeetCode-解码方法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/04/LeetCode-解码方法/" itemprop="commentCount"></span>
+                <a href="/2018/07/04/LeetCode-出界的路径数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/04/LeetCode-出界的路径数/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,40 +352,40 @@
       
 
       
-        <p><strong>摘要：</strong>一条包含字母 A-Z 的消息通过以下方式进行了编码：</p>
-<p>‘A’ -&gt; 1<br>‘B’ -&gt; 2<br>…<br>‘Z’ -&gt; 26</p>
-<p>给定一个只包含数字的非空字符串，请计算解码方法的总数。</p>
+        <p><strong>摘要：</strong>给定一个 m × n 的网格和一个球。球的起始坐标为 (i,j) ，你可以将球移到相邻的单元格内，或者往上、下、左、右四个方向上移动使球穿过网格边界。但是，你最多可以移动 N 次。找出可以将球移出边界的路径数量。答案可能非常大，返回 结果 mod 109 + 7 的值。</p>
 <a id="more"></a>
-<h2 id="Problem："><a href="#Problem：" class="headerlink" title="Problem："></a>Problem：</h2><p>题目：一条包含字母 A-Z 的消息通过以下方式进行了编码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&apos;A&apos; -&gt; 1 </span><br><span class="line">&apos;B&apos; -&gt; 2</span><br><span class="line">...</span><br><span class="line">&apos;Z&apos; -&gt; 26</span><br></pre></td></tr></table></figure>
-<p>给定一个只包含数字的非空字符串，请计算解码方法的总数。</p>
+<h2 id="Problem："><a href="#Problem：" class="headerlink" title="Problem："></a>Problem：</h2><p>题目：给定一个 m × n 的网格和一个球。球的起始坐标为 (i,j) ，你可以将球移到相邻的单元格内，或者往上、下、左、右四个方向上移动使球穿过网格边界。但是，你最多可以移动 N 次。找出可以将球移出边界的路径数量。答案可能非常大，返回结果 mod 109 + 7 的值。</p>
 <p>测试用例：</p>
 <table>
 <thead>
 <tr>
 <th style="text-align:center">input</th>
 <th style="text-align:center">output</th>
-<th style="text-align:center">说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">“12”</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">“AB”(1,2)或者”L”(12)</td>
+<td style="text-align:center">m = 2, n = 2, N = 2, i = 0, j = 0</td>
+<td style="text-align:center">6</td>
 </tr>
 <tr>
-<td style="text-align:center">“226”</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">“BZ”(2,26)或者”VF”(22,6)或者”BBF”(2,2,6)</td>
+<td style="text-align:center">m = 1, n = 3, N = 3, i = 0, j = 1</td>
+<td style="text-align:center">12</td>
 </tr>
 </tbody>
 </table>
-<h2 id="解法：动态规划"><a href="#解法：动态规划" class="headerlink" title="解法：动态规划"></a>解法：动态规划</h2><p>类似于爬楼梯的思想，要么把前一个数字当成一位数，要么把前两个数字当成两位数，当前位置的方案数，等于前一位和前两位的和。</p>
-<p>如果当成一位解码，数字不能为0，如果当成两位解码，数字要大于等于10，小于等于26。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(s.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(s.size()+<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; dp.size(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (s[i<span class="number">-1</span>] != <span class="string">'0'</span>) dp[i] += dp[i<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">if</span>(i &gt;= <span class="number">2</span> &amp;&amp; s.substr(i<span class="number">-2</span>, <span class="number">2</span>) &lt;= <span class="string">"26"</span> &amp;&amp; s.substr(i<span class="number">-2</span>, <span class="number">2</span>) &gt;= <span class="string">"10"</span>)</span><br><span class="line">                dp[i] += dp[i<span class="number">-2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp.back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>可以压缩辅助空间，从$O(n)$到$O(1)$。类似斐波那契数列，可以使用双值迭代的方法进行空间优化。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(s.empty() || s[<span class="number">0</span>] == <span class="string">'0'</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> c1 = <span class="number">1</span>, c2 = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; s.size(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i] == <span class="string">'0'</span>) c1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span>(s[i<span class="number">-1</span>] == <span class="string">'1'</span> || (s[i<span class="number">-1</span>] == <span class="string">'2'</span> &amp;&amp; s[i] &lt;= <span class="string">'6'</span>))&#123;</span><br><span class="line">                c1 = c1 + c2;</span><br><span class="line">                c2 = c1 - c2;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> c2 = c1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>说明:</p>
+<ul>
+<li>球一旦出界，就不能再被移动回网格内。</li>
+<li>网格的长度和高度在 [1,50] 的范围内。</li>
+<li>N 在 [0,50] 的范围内。</li>
+</ul>
+<h2 id="解法一：动态规划"><a href="#解法一：动态规划" class="headerlink" title="解法一：动态规划"></a>解法一：动态规划</h2><p>设置一个三维数组，dp[k][i][j],表示从（i，j）出界，并且最多走k步的路径数。到达该位置，可以从上下左右四个方向走过来，并且最多走k-1步。那么该位置就等于上下左右四个位置最多走k-1步的方案数的和。</p>
+<p>时间复杂度：$O(n^3)$</p>
+<p>空间复杂度：$O(n^3)$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findPaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span> N, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; &gt; dp(N+<span class="number">1</span>, <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt;(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>)));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= N; k++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; m; x++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; n; y++)&#123;</span><br><span class="line">                    <span class="keyword">long</span> <span class="keyword">long</span> up = (x == <span class="number">0</span>) ? <span class="number">1</span> : dp[k<span class="number">-1</span>][x<span class="number">-1</span>][y];</span><br><span class="line">                    <span class="keyword">long</span> <span class="keyword">long</span> down = (x == m<span class="number">-1</span>) ? <span class="number">1</span> : dp[k<span class="number">-1</span>][x+<span class="number">1</span>][y];</span><br><span class="line">                    <span class="keyword">long</span> <span class="keyword">long</span> left = (y == <span class="number">0</span>) ? <span class="number">1</span> : dp[k<span class="number">-1</span>][x][y<span class="number">-1</span>];</span><br><span class="line">                    <span class="keyword">long</span> <span class="keyword">long</span> right = (y == n<span class="number">-1</span>) ? <span class="number">1</span> : dp[k<span class="number">-1</span>][x][y+<span class="number">1</span>];</span><br><span class="line">                    dp[k][x][y] = (up + down + left + right) % <span class="number">1000000007</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[N][i][j];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="解法二：动态规划"><a href="#解法二：动态规划" class="headerlink" title="解法二：动态规划"></a>解法二：动态规划</h2><p>相当于枚举走1到N步分别有多少种方案可以出界，然后加和。dp[i][j]表示走k步时从（i，j）出界的方案数。每次建立一个临时数据temp[m][n]，遍历每一个位置，计算走k+1时从（i，j）出界的方案数，然后将temp赋值给dp，进行下一次遍历。如果遍历到边界的位置，就给res加上相应的方案数。最后返回res。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findPaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span> N, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span> &lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; dp (m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">        dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; dirs&#123;&#123;<span class="number">0</span>,<span class="number">1</span>&#125;,&#123;<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">-1</span>&#125;,&#123;<span class="number">-1</span>,<span class="number">0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; N; k++)&#123;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; temp (m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; m; r++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; n; c++)&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">auto</span> dir: dirs)&#123;</span><br><span class="line">                        <span class="keyword">int</span> x = r + dir[<span class="number">0</span>], y = c + dir[<span class="number">1</span>];</span><br><span class="line">                        <span class="keyword">if</span>(x &lt; <span class="number">0</span> || x &gt;= m || y &lt; <span class="number">0</span> || y &gt;= n)</span><br><span class="line">                            res = (res + dp[r][c]) % <span class="number">1000000007</span>;</span><br><span class="line">                        <span class="keyword">else</span> </span><br><span class="line">                            temp[x][y] = (temp[x][y] + dp[r][c]) % <span class="number">1000000007</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            dp = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -417,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/03/LeetCode-最小路径和/" rel="next" title="LeetCode:最小路径和">
-                <i class="fa fa-chevron-left"></i> LeetCode:最小路径和
+              <a href="/2018/07/04/LeetCode-解码方法/" rel="next" title="LeetCode:解码方法">
+                <i class="fa fa-chevron-left"></i> LeetCode:解码方法
               </a>
             
           </div>
@@ -427,8 +427,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/04/LeetCode-出界的路径数/" rel="prev" title="LeetCode:出界的路径数">
-                LeetCode:出界的路径数 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/12/LeetCode-最长递增子序列的个数/" rel="prev" title="LeetCode:最长递增子序列的个数">
+                LeetCode:最长递增子序列的个数 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -568,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem："><span class="nav-text">Problem：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法：动态规划"><span class="nav-text">解法：动态规划</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem："><span class="nav-text">Problem：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法一：动态规划"><span class="nav-text">解法一：动态规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法二：动态规划"><span class="nav-text">解法二：动态规划</span></a></li></ol></div>
             
 
           </div>
