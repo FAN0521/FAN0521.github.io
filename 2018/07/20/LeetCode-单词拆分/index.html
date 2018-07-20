@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="摘要：给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？">
+<meta name="description" content="摘要：给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。">
 <meta name="keywords" content="DP,LeetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode:不同的二叉搜索树">
-<meta property="og:url" content="http://yoursite.com/2018/07/19/LeetCode-不同的二叉搜索树/index.html">
+<meta property="og:title" content="LeetCode:单词拆分">
+<meta property="og:url" content="http://yoursite.com/2018/07/20/LeetCode-单词拆分/index.html">
 <meta property="og:site_name" content="FAN">
-<meta property="og:description" content="摘要：给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？">
+<meta property="og:description" content="摘要：给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-19T00:34:29.217Z">
+<meta property="og:updated_time" content="2018-07-20T01:19:59.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode:不同的二叉搜索树">
-<meta name="twitter:description" content="摘要：给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？">
+<meta name="twitter:title" content="LeetCode:单词拆分">
+<meta name="twitter:description" content="摘要：给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/19/LeetCode-不同的二叉搜索树/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/20/LeetCode-单词拆分/"/>
 
 
 
 
 
-  <title>LeetCode:不同的二叉搜索树 | FAN</title>
+  <title>LeetCode:单词拆分 | FAN</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/LeetCode-不同的二叉搜索树/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/LeetCode-单词拆分/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FAN">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LeetCode:不同的二叉搜索树</h1>
+          <h1 class="post-title" itemprop="name headline">LeetCode:单词拆分</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T08:16:00+08:00">
-                2018-07-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T09:08:12+08:00">
+                2018-07-20
               </time>
             
 
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/19/LeetCode-不同的二叉搜索树/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/19/LeetCode-不同的二叉搜索树/" itemprop="commentCount"></span>
+                <a href="/2018/07/20/LeetCode-单词拆分/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/20/LeetCode-单词拆分/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,35 +352,43 @@
       
 
       
-        <p><strong>摘要：</strong>给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？</p>
+        <p><strong>摘要：</strong>给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。</p>
 <a id="more"></a>
-<h2 id="Problem："><a href="#Problem：" class="headerlink" title="Problem："></a>Problem：</h2><p>题目：给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？</p>
+<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem:"></a>Problem:</h2><p>题目：给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。</p>
 <p>测试用例：</p>
 <table>
 <thead>
 <tr>
 <th style="text-align:center">input</th>
 <th style="text-align:center">output</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">5</td>
+<td style="text-align:center">“leetcode”<br>[“leet”, “code”]</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">“leetcode” 可以被拆分成 “leet code”。</td>
+</tr>
+<tr>
+<td style="text-align:center">“applepenapple”<br>[[“apple”, “pen”]]</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">“applepenapple” 可以被拆分成 “apple pen apple”。</td>
+</tr>
+<tr>
+<td style="text-align:center">“catsandog”<br>[“cats”, “dog”, “sand”, “and”, “cat”]</td>
+<td style="text-align:center">false</td>
 </tr>
 </tbody>
 </table>
 <p>说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1         3     3      2      1</span><br><span class="line"> \       /     /      / \      \</span><br><span class="line">  3     2     1      1   3      2</span><br><span class="line"> /     /       \                 \</span><br><span class="line">2     1         2                 3</span><br></pre></td></tr></table></figure>
-<h2 id="解法：卡特兰数"><a href="#解法：卡特兰数" class="headerlink" title="解法：卡特兰数"></a>解法：卡特兰数</h2><p>dp[i]表示当有i个节点时，1，… ，i为节点组成的二叉搜索树有多少种。</p>
-<p>dp[0] = 1, </p>
-<p>dp[1] = 1, </p>
-<p>dp[2] = dp[0] <em> dp[1] + dp[1] </em> dp[0] (1为根的情况和2为根的情况)，</p>
-<p>dp[3] = dp[0] <em> dp[2] + dp[1] </em> dp[1] + dp[2] * dp[0],<br>(1为根的情况，2为根的情况， 3为根的情况) </p>
-<p>…</p>
-<p>由此发现答案为卡特兰数：</p>
-<p>$$C_0 = 1 \mbox{ and } C_{n+1} = \sum^n_{i=0} C_iC_{n-i} \mbox{ for } n \ge 0.$$</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numTrees</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(n+<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                dp[i] += dp[j] * dp[i-j<span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>拆分时可以重复使用字典中的单词。</li>
+<li>你可以假设字典中没有重复的单词。</li>
+</ul>
+<h2 id="解法：动态规划"><a href="#解法：动态规划" class="headerlink" title="解法：动态规划"></a>解法：动态规划</h2><p>思路有点类似于暴力搜索。res[i]表示以i为结尾，前面的字符串能否被拆分。遍历i之前的字符串，如果前一部分为true，可以被拆分，后一部分又可以在字典中找到，则res[i] = true。</p>
+<p>Tips: vector可以使用std中的find函数查找是否有某个特定值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">wordBreak</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordDict)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.size();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; res(len+<span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line">        res[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(res[j] &amp;&amp; <span class="built_in">std</span>::find(wordDict.begin(), wordDict.end(), s.substr(j, i-j)) != wordDict.end())&#123;</span><br><span class="line">                    res[i] = <span class="literal">true</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -412,8 +420,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/12/LeetCode-零钱兑换/" rel="next" title="LeetCode:零钱兑换">
-                <i class="fa fa-chevron-left"></i> LeetCode:零钱兑换
+              <a href="/2018/07/19/LeetCode-不同的二叉搜索树2/" rel="next" title="LeetCode:不同的二叉搜索树2">
+                <i class="fa fa-chevron-left"></i> LeetCode:不同的二叉搜索树2
               </a>
             
           </div>
@@ -422,8 +430,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/19/LeetCode-不同的二叉搜索树2/" rel="prev" title="LeetCode:不同的二叉搜索树2">
-                LeetCode:不同的二叉搜索树2 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/20/LeetCode-三角形最小路径和/" rel="prev" title="LeetCode:三角形最小路径和">
+                LeetCode:三角形最小路径和 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -563,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem："><span class="nav-text">Problem：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法：卡特兰数"><span class="nav-text">解法：卡特兰数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-text">Problem:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法：动态规划"><span class="nav-text">解法：动态规划</span></a></li></ol></div>
             
 
           </div>
