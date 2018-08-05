@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="DP,LeetCode," />
+  <meta name="keywords" content="LeetCode,树," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="摘要：给定一个非负整数 num。 对于范围 0 ≤ i ≤ num 中的每个数字 i ，计算其二进制数中的1的数目并将它们作为数组返回。">
-<meta name="keywords" content="DP,LeetCode">
+<meta name="description" content="摘要：给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。">
+<meta name="keywords" content="LeetCode,树">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode:Counting Bits 计数位">
-<meta property="og:url" content="http://yoursite.com/2018/07/31/LeetCode-Counting-Bits-计数位/index.html">
+<meta property="og:title" content="LeetCode:路径总和">
+<meta property="og:url" content="http://yoursite.com/2018/08/05/LeetCode-路径总和/index.html">
 <meta property="og:site_name" content="FAN">
-<meta property="og:description" content="摘要：给定一个非负整数 num。 对于范围 0 ≤ i ≤ num 中的每个数字 i ，计算其二进制数中的1的数目并将它们作为数组返回。">
+<meta property="og:description" content="摘要：给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-31T04:03:50.278Z">
+<meta property="og:updated_time" content="2018-08-05T09:12:52.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode:Counting Bits 计数位">
-<meta name="twitter:description" content="摘要：给定一个非负整数 num。 对于范围 0 ≤ i ≤ num 中的每个数字 i ，计算其二进制数中的1的数目并将它们作为数组返回。">
+<meta name="twitter:title" content="LeetCode:路径总和">
+<meta name="twitter:description" content="摘要：给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/31/LeetCode-Counting-Bits-计数位/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/05/LeetCode-路径总和/"/>
 
 
 
 
 
-  <title>LeetCode:Counting Bits 计数位 | FAN</title>
+  <title>LeetCode:路径总和 | FAN</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/LeetCode-Counting-Bits-计数位/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/05/LeetCode-路径总和/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FAN">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LeetCode:Counting Bits 计数位</h1>
+          <h1 class="post-title" itemprop="name headline">LeetCode:路径总和</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T11:39:15+08:00">
-                2018-07-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-05T16:51:20+08:00">
+                2018-08-05
               </time>
             
 
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/31/LeetCode-Counting-Bits-计数位/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/31/LeetCode-Counting-Bits-计数位/" itemprop="commentCount"></span>
+                <a href="/2018/08/05/LeetCode-路径总和/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/05/LeetCode-路径总和/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,36 +352,14 @@
       
 
       
-        <p><strong>摘要：</strong>给定一个非负整数 num。 对于范围 0 ≤ i ≤ num 中的每个数字 i ，计算其二进制数中的1的数目并将它们作为数组返回。</p>
+        <p><strong>摘要：</strong>给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。</p>
 <a id="more"></a>
-<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem:"></a>Problem:</h2><p>题目：给定一个非负整数 num。 对于范围 0 ≤ i ≤ num 中的每个数字 i ，计算其二进制数中的1的数目并将它们作为数组返回。</p>
-<p>测试用例：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">input</th>
-<th style="text-align:center">output</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">[0,1,1,2,1,2]</td>
-</tr>
-</tbody>
-</table>
-<p>Tips:</p>
-<ul>
-<li>在线性时间O(n)内用一次遍历</li>
-<li>要求算法的空间复杂度为O(n)。</li>
-<li>在c ++或任何其他语言中不使用任何内置函数（如c++里的 __builtin_popcount）来执行此操作。</li>
-</ul>
-<h2 id="解法一：找规律一"><a href="#解法一：找规律一" class="headerlink" title="解法一：找规律一"></a>解法一：找规律一</h2><p>在区间$[2^{k-1}, 2^k)$中前一半的结果和区间$[2^{k-2}, 2^{k-1})$结果一样，后一半的结果是区间$[2^{k-2}, 2^{k-1})$的结果+1。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">if</span>(num == <span class="number">0</span>) <span class="keyword">return</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res&#123;<span class="number">0</span>, <span class="number">1</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">2</span>, i = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;=num)&#123;</span><br><span class="line">            <span class="keyword">for</span>(i = <span class="built_in">pow</span>(<span class="number">2</span>, k<span class="number">-1</span>); i&lt;<span class="built_in">pow</span>(<span class="number">2</span>,k); i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i&gt;num) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">int</span> mid = (<span class="built_in">pow</span>(<span class="number">2</span>,k)-<span class="built_in">pow</span>(<span class="number">2</span>,k<span class="number">-1</span>))/<span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span>(i&lt;<span class="built_in">pow</span>(<span class="number">2</span>,k<span class="number">-1</span>)+mid) res.push_back(res[i-mid]);</span><br><span class="line">                <span class="keyword">else</span> res.push_back(res[i-mid]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            k++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="解法二：找规律二"><a href="#解法二：找规律二" class="headerlink" title="解法二：找规律二"></a>解法二：找规律二</h2><p>如果是偶数，结果和该数除以2的结果一样，如果是奇数，结果等于该数除以2的结果加1。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">if</span>(num == <span class="number">0</span>) <span class="keyword">return</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res&#123;<span class="number">0</span>, <span class="number">1</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=num; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i%<span class="number">2</span>) res.push_back(res[i/<span class="number">2</span>] + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">else</span> res.push_back(res[i/<span class="number">2</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="解法三：找规律三"><a href="#解法三：找规律三" class="headerlink" title="解法三：找规律三"></a>解法三：找规律三</h2><p>结果是<code>i&amp;(i-1)</code>对应的结果+1。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res(num+<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;num+<span class="number">1</span>; i++)</span><br><span class="line">            res[i] = res[i &amp; (i<span class="number">-1</span>)] + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem:"></a>Problem:</h2><p>题目：给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。</p>
+<h2 id="解法：递归"><a href="#解法：递归" class="headerlink" title="解法：递归"></a>解法：递归</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">hasPathSum</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(root -&gt; left == <span class="literal">NULL</span> &amp;&amp; root -&gt; right == <span class="literal">NULL</span> &amp;&amp; root -&gt; val == sum) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> hasPathSum(root -&gt; left, sum - root -&gt; val) || hasPathSum(root -&gt; right, sum - root -&gt; val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Problem2"><a href="#Problem2" class="headerlink" title="Problem2:"></a>Problem2:</h2><p>题目：给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。</p>
+<h2 id="解法：递归-1"><a href="#解法：递归-1" class="headerlink" title="解法：递归"></a>解法：递归</h2><p>递归的时候先加入节点，回溯之后再pop_back();</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; allPath;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; onePath;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; pathSum(TreeNode* root, <span class="keyword">int</span> sum) &#123;</span><br><span class="line">        findPath(root, sum);</span><br><span class="line">        <span class="keyword">return</span> allPath;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findPath</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">        onePath.push_back(root -&gt; val);</span><br><span class="line">        <span class="keyword">if</span>(root -&gt; left == <span class="literal">NULL</span> &amp;&amp; root -&gt; right == <span class="literal">NULL</span> &amp;&amp; root -&gt; val == sum)</span><br><span class="line">            allPath.push_back(onePath);</span><br><span class="line">        findPath(root -&gt; left, sum - root -&gt; val);</span><br><span class="line">        findPath(root -&gt; right, sum - root -&gt; val);</span><br><span class="line">        onePath.pop_back();</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -398,9 +376,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/DP/" rel="tag"># DP</a>
-          
             <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          
+            <a href="/tags/树/" rel="tag"># 树</a>
           
         </div>
       
@@ -413,8 +391,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/31/LeetCode-最佳买卖股票时机含冷冻期/" rel="next" title="LeetCode:最佳买卖股票时机含冷冻期">
-                <i class="fa fa-chevron-left"></i> LeetCode:最佳买卖股票时机含冷冻期
+              <a href="/2018/08/04/LeetCode226-二叉树的层次遍历/" rel="next" title="LeetCode226:二叉树的层次遍历">
+                <i class="fa fa-chevron-left"></i> LeetCode226:二叉树的层次遍历
               </a>
             
           </div>
@@ -423,8 +401,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/01/LeetCode-整数拆分/" rel="prev" title="LeetCode:整数拆分">
-                LeetCode:整数拆分 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/05/LeetCode-前序中序后序构造二叉树/" rel="prev" title="LeetCode:前序中序后序构造二叉树">
+                LeetCode:前序中序后序构造二叉树 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -564,7 +542,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-text">Problem:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法一：找规律一"><span class="nav-text">解法一：找规律一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法二：找规律二"><span class="nav-text">解法二：找规律二</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法三：找规律三"><span class="nav-text">解法三：找规律三</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-text">Problem:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法：递归"><span class="nav-text">解法：递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem2"><span class="nav-text">Problem2:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法：递归-1"><span class="nav-text">解法：递归</span></a></li></ol></div>
             
 
           </div>
