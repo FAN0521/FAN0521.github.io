@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="FAN">
 <meta property="og:description" content="摘要：算法导论第一章到第四章。主要内容有：渐近时间复杂度分析（$O, \Theta, \Omega$），递归算法及其时间分析（代入法，递归树法，Master法），红黑树的旋转插入删除。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T19:17:20.643Z">
+<meta property="og:updated_time" content="2018-12-27T19:21:37.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法导论（1）">
 <meta name="twitter:description" content="摘要：算法导论第一章到第四章。主要内容有：渐近时间复杂度分析（$O, \Theta, \Omega$），递归算法及其时间分析（代入法，递归树法，Master法），红黑树的旋转插入删除。">
@@ -369,7 +369,7 @@
 <p>算法分析包括时间复杂度和空间复杂度</p>
 <p>传统分析方法：$\sum (指令执行时间 * 执行次数)$</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">插入排序</span><br><span class="line"></span><br><span class="line">Insert-sort(A)</span><br><span class="line">	for j = 2 to A.length					</span><br><span class="line">		key = A[j]							</span><br><span class="line">		i = j-1								</span><br><span class="line">		while i&gt;0 and A[i]&gt;key				</span><br><span class="line">			A[i+1] = A[i]</span><br><span class="line">			i = i-1</span><br><span class="line">		A[i-1] = key</span><br></pre></td></tr></table></figure>
-<p>$$<br>\begin{align}<br>T(n) = &amp; C_1n + C_2(n-1) + C_3(n-1) + C_4\sum_{j=2}^{n}t_j + \<br>&amp; C_5 \sum_{j=2}^n(t_j-1) + C_6 \sum_{j=2}^n(t_j-1) + C_7(n-1)<br>\end{align}<br>$$</p>
+<p>\begin{align}<br>T(n) = &amp; C_1n + C_2(n-1) + C_3(n-1) + C_4\sum_{j=2}^{n}t_j + \\<br>&amp; C_5 \sum_{j=2}^n(t_j-1) + C_6 \sum_{j=2}^n(t_j-1) + C_7(n-1)<br>\end{align}</p>
 <p>最好情况：输入数据为升序，A[i] &lt;= key，所以$t_j=1$。$T(n) = An + B$</p>
 <p>最坏情况：输入数据为降序，A[i] &gt; key, 所以$t_j=j$。$T(n) = An^2 + Bn + C$</p>
 <p>平均情况：$t_j = j/2$，$T(n) 和 n^2$相关</p>
@@ -391,7 +391,7 @@
 <p>$\Omega$符号：渐近下界</p>
 <p><strong>定理：</strong>对于任意的函数$f(n)$和$g(n)$，当且仅当$f(n)=O(g(n))$且$f(n)=\Omega(g(n))$时，$f(n) = \Theta(g(n))$</p>
 <p>利用极限比较函数间的增长速度：</p>
-<p>$$ \lim_{n \to \infty} \frac {f(n)}{g(n)}=\left{<br>\begin{align}<br>&amp; 0 \ \ \ \ \Rightarrow f(n) &lt; g(n) \ \ \ \ \Rightarrow f(n) = O(g(n)) \<br>&amp; C \ \ \ \ \Rightarrow f(n) = g(n) \ \ \ \ \Rightarrow f(n) = \Theta(g(n)) \<br>&amp; \infty \ \ \ \Rightarrow f(n) &gt; g(n) \ \ \ \ \Rightarrow f(n) = \Omega(g(n))<br>\end{align}<br>\right.<br>$$</p>
+<p>$$<br>\lim_{n \to \infty} \frac {f(n)}{g(n)}=\left{<br>\begin{align}<br>&amp; 0 \ \ \ \ \Rightarrow f(n) &lt; g(n) \ \ \ \ \Rightarrow f(n) = O(g(n)) \<br>&amp; C \ \ \ \ \Rightarrow f(n) = g(n) \ \ \ \ \Rightarrow f(n) = \Theta(g(n)) \<br>&amp; \infty \ \ \ \Rightarrow f(n) &gt; g(n) \ \ \ \ \Rightarrow f(n) = \Omega(g(n))<br>\end{align}<br>\right.<br>$$</p>
 <h2 id="第三章-分治法及递归算法的分析方法"><a href="#第三章-分治法及递归算法的分析方法" class="headerlink" title="第三章 分治法及递归算法的分析方法"></a>第三章 分治法及递归算法的分析方法</h2><p>分治法的三个基本步骤：</p>
 <ul>
 <li>分解问题：把原问题分解为若干个与原问题性质类似的子问题</li>
