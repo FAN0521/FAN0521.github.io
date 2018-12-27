@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="摘要：剑指offer解题报告 二维数组中的查找二维数组从左到右从上到下递增，给定一个数，查找是否在数组中。 从右上角（或者左下角）开始搜索。要是比给定大，搜索前一列，要是小，搜索下一行。 12345678910111213class Solution &amp;#123;public:    bool Find(int target, vector&amp;lt;vector&amp;lt;int&amp;gt; &amp;gt; ar">
+<meta name="description" content="摘要：剑指offer解题报告">
 <meta name="keywords" content="剑指offer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="剑指offer解题报告">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/剑指offer/index.html">
 <meta property="og:site_name" content="FAN">
-<meta property="og:description" content="摘要：剑指offer解题报告 二维数组中的查找二维数组从左到右从上到下递增，给定一个数，查找是否在数组中。 从右上角（或者左下角）开始搜索。要是比给定大，搜索前一列，要是小，搜索下一行。 12345678910111213class Solution &amp;#123;public:    bool Find(int target, vector&amp;lt;vector&amp;lt;int&amp;gt; &amp;gt; ar">
+<meta property="og:description" content="摘要：剑指offer解题报告">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/ysf.png">
-<meta property="og:updated_time" content="2018-09-10T23:56:40.191Z">
+<meta property="og:updated_time" content="2018-12-27T19:02:55.198Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剑指offer解题报告">
-<meta name="twitter:description" content="摘要：剑指offer解题报告 二维数组中的查找二维数组从左到右从上到下递增，给定一个数，查找是否在数组中。 从右上角（或者左下角）开始搜索。要是比给定大，搜索前一列，要是小，搜索下一行。 12345678910111213class Solution &amp;#123;public:    bool Find(int target, vector&amp;lt;vector&amp;lt;int&amp;gt; &amp;gt; ar">
+<meta name="twitter:description" content="摘要：剑指offer解题报告">
 <meta name="twitter:image" content="http://yoursite.com/images/ysf.png">
 
 
@@ -366,6 +366,7 @@
 
       
         <p><strong>摘要：</strong>剑指offer解题报告</p>
+<a id="more"></a>
 <h3 id="二维数组中的查找"><a href="#二维数组中的查找" class="headerlink" title="二维数组中的查找"></a>二维数组中的查找</h3><p>二维数组从左到右从上到下递增，给定一个数，查找是否在数组中。</p>
 <p>从右上角（或者左下角）开始搜索。要是比给定大，搜索前一列，要是小，搜索下一行。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">Find</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; <span class="built_in">array</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="built_in">array</span>[<span class="number">0</span>].size()<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; i &lt; <span class="built_in">array</span>.size())&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">array</span>[i][j] == target) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">array</span>[i][j] &lt; target) i++;</span><br><span class="line">            <span class="keyword">else</span> j--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -738,7 +739,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -749,7 +750,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
